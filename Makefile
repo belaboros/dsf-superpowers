@@ -1,4 +1,4 @@
-# Dark / grey Software Factory: entry points for humans, agents, hooks and CI.
+# Dark / gray Software Factory: entry points for humans, agents, hooks and CI.
 # Layers add targets in Makefile.workflow (dsf-* repo) and Makefile.app (application stack).
 -include Makefile.workflow
 -include Makefile.app

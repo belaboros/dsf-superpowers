@@ -44,7 +44,7 @@ fi
 git config core.hooksPath .dsf/githooks
 
 cat > .dsf.layer <<LAYER
-# Dark / grey Software Factory workflow layer. Parent: dsf-base.
+# Dark / gray Software Factory workflow layer. Parent: dsf-base.
 ROLE=workflow
 WORKFLOW_NAME=$name
 BASE_URL=$base_url

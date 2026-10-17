@@ -1,6 +1,6 @@
 ---
 name: dsf-factory-improve
-description: Improve the Dark / grey Software Factory itself - upgrade skill packs and tools, turn repeated human corrections into deterministic rules and hooks, and tune the review and architect agents. Use in factory mode, when the weekly dsf-factory-improve workflow runs, or when the human asks to make the factory more autonomous.
+description: Improve the Dark / gray Software Factory itself - upgrade skill packs and tools, turn repeated human corrections into deterministic rules and hooks, and tune the review and architect agents. Use in factory mode, when the weekly dsf-factory-improve workflow runs, or when the human asks to make the factory more autonomous.
 ---
 
 # Factory improvement

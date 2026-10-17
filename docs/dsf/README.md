@@ -1,4 +1,4 @@
-# Dark / grey Software Factory: how it works
+# Dark / gray Software Factory: how it works
 
 These pages are shared by every dsf-* repo and every application cloned from one. They come from dsf-base; improve them there (or contribute changes back with `make contribute`).
 

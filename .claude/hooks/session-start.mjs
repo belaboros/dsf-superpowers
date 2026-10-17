@@ -10,7 +10,7 @@ const mode = currentMode();
 const lines = [];
 const role = existsSync(join(projectDir, ".dsf.app")) ? "application" : existsSync(join(projectDir, ".dsf.layer")) ? "workflow" : "base";
 
-lines.push(`# Dark / grey Software Factory context`);
+lines.push(`# Dark / gray Software Factory context`);
 lines.push(`Repo role: ${role}. Mode: ${mode.name}: ${mode.description}`);
 if (mode.unknown) lines.push(`WARNING: unknown DSF_MODE; valid modes are in .dsf/modes.json.`);
 lines.push(`Protected in this mode: ${mode.protect.join(", ") || "nothing"}`);

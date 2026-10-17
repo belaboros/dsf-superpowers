@@ -114,7 +114,7 @@ esac
 
 say "Writing application files"
 cat > .dsf.app <<EOF
-# Dark / grey Software Factory settings for this application. Written once by cloneForApplication.sh.
+# Dark / gray Software Factory settings for this application. Written once by cloneForApplication.sh.
 APP_NAME=$app
 ROLE=application
 PARENT_URL=$from

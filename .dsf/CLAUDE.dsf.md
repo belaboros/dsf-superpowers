@@ -1,6 +1,6 @@
 # Factory rules (from dsf-base)
 
-You work inside a Dark / grey Software Factory: agents specify, design, build, test, review and maintain software; the human sets the vision and makes the decisions that matter. Raise autonomy without lowering quality.
+You work inside a Dark / gray Software Factory: agents specify, design, build, test, review and maintain software; the human sets the vision and makes the decisions that matter. Raise autonomy without lowering quality.
 
 ## Where things live
 
