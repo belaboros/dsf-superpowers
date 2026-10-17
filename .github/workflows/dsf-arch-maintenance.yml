@@ -1,0 +1,36 @@
+# Weekly architecture maintenance: measure cohesion and coupling, explain, propose alternatives.
+# The human decides on the proposal PR. Enable with DSF_AGENTS_ENABLED=true (see docs/dsf/setup.md).
+name: dsf-arch-maintenance
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+jobs:
+  maintain:
+    if: ${{ vars.DSF_AGENTS_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - if: ${{ hashFiles('docs/architecture/modules.json') != '' }}
+        run: if [ -f package-lock.json ]; then npm ci; elif [ -f package.json ]; then npm install; fi
+      - uses: anthropics/claude-code-action@v1
+        if: ${{ hashFiles('docs/architecture/modules.json') != '' }}
+        env:
+          DSF_MODE: design
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Run the dsf-arch-maintenance skill for this repository.
+            Commit the health report and the proposal on a new branch named arch/maintenance-<today's date>,
+            open a pull request for the human, and create the arch-decision tasks the skill describes.

@@ -1,0 +1,37 @@
+# Paths owned by the factory (dsf-base plus the workflow layer of this dsf-* repo).
+#
+#   dsf-base  ->  dsf-<workflow>  ->  application
+#
+# An application repo uses this file to tell factory changes from application
+# changes. `scripts/dsf/dsf-sync.sh contribute` sends commits that touch only these
+# paths back to the dsf-* repo the application was cloned from.
+# Everything not matched here belongs to the application and never leaves it.
+#
+# Pattern rules: see base.paths.
+
+.dsf/
+!.dsf/settings/app.json
+!.dsf/modes.app.json
+.dsf.layer
+.claude/
+!.claude/settings.local.json
+!.claude/skills/app-
+!.claude/agents/app-
+!.claude/commands/app-
+=.claude/settings.json
+.specify/
+=.specify/memory/constitution.md
+scripts/dsf/
+config/dsf/
+docs/dsf/
+docs/workflow/
+.github/workflows/dsf-
+CLAUDE.md
+Makefile
+Makefile.workflow
+cloneForApplication.sh
+base.paths
+dsf.paths
+=README.md
+=.gitignore
+=LICENSE

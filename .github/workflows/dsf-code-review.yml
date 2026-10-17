@@ -1,0 +1,35 @@
+# Independent review of every PR by the dsf-code-reviewer agent (and dsf-arch-reviewer for architecture changes).
+# Enable by setting the repository variable DSF_AGENTS_ENABLED=true and the secret CLAUDE_CODE_OAUTH_TOKEN
+# (or ANTHROPIC_API_KEY). See docs/dsf/setup.md.
+name: dsf-code-review
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  id-token: write
+jobs:
+  review:
+    if: ${{ vars.DSF_AGENTS_ENABLED == 'true' && !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: if [ -f package-lock.json ]; then npm ci; elif [ -f package.json ]; then npm install; fi
+      - uses: anthropics/claude-code-action@v1
+        env:
+          DSF_MODE: build
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          use_sticky_comment: true
+          prompt: |
+            Review pull request #${{ github.event.pull_request.number }} in ${{ github.repository }}.
+            Use the dsf-code-reviewer agent. If the PR changes docs/architecture/**, also use the dsf-arch-reviewer agent.
+            Post one review comment with the graded findings and the verdict. Do not push commits, approve or merge.

@@ -1,0 +1,30 @@
+# Runs the same `make check` the agents' Stop hook runs. CI is the final authority.
+name: dsf-ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install stack dependencies
+        run: if [ -f package-lock.json ]; then npm ci; elif [ -f package.json ]; then npm install; fi
+      - name: make check
+        run: make check
+      - name: Chain selftest (dsf-base only)
+        if: hashFiles('.dsf.layer', '.dsf.app') == ''
+        run: scripts/dsf/selftest.sh
+      - name: Architecture health report
+        if: always()
+        run: |
+          node scripts/dsf/arch/health.mjs > /dev/null || true
+          if [ -f arch/health/latest.md ]; then cat arch/health/latest.md >> "$GITHUB_STEP_SUMMARY"; fi

@@ -1,0 +1,20 @@
+{
+  "$comment": "Separation of duties for agents. Start Claude with `make design`, `make build` or `make factory` (sets DSF_MODE). The PreToolUse hooks refuse edits to the paths a mode protects.",
+  "default": "build",
+  "modes": {
+    "design": {
+      "description": "Interviews, vision, PRD, user acceptance scenarios, architecture, modules and ADRs. No production code.",
+      "protect": ["src/", "@factory"]
+    },
+    "build": {
+      "description": "Implement tasks: production code, unit, component and integration tests, UAT step definitions.",
+      "protect": ["specs/", "uat/features/", "docs/architecture/", "@factory"]
+    },
+    "factory": {
+      "description": "Improve the factory itself: skills, hooks, rules, checks, CI, docs.",
+      "protect": ["specs/", "uat/features/", "src/"]
+    }
+  },
+  "factory": [".claude/", ".dsf/", "config/dsf/", "scripts/dsf/", ".github/", "Makefile", "Makefile.workflow", "Makefile.app", "base.paths", "dsf.paths", ".specify/", "eslint.config.js", ".dependency-cruiser.cjs", "tsconfig.json", "vitest.config.ts", "playwright.config.ts"],
+  "alwaysProtect": [".dsf.app", ".dsf.layer", "factory/logs/"]
+}

@@ -1,0 +1,38 @@
+# Weekly: merge the parent factory (dsf-* repo, or dsf-base for a dsf-* repo) into a branch and open a PR.
+# Needs the secret DSF_PARENT_TOKEN (a fine-grained token with read access to the parent repo) when the parent is private.
+name: dsf-sync
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Merge the parent factory
+        if: ${{ hashFiles('.dsf.app') != '' || hashFiles('.dsf.layer') != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PARENT_TOKEN: ${{ secrets.DSF_PARENT_TOKEN }}
+        run: |
+          git config user.name "dsf-sync"
+          git config user.email "dsf-sync@users.noreply.github.com"
+          if [ -f .dsf.app ]; then remote=dsf; url=$(sed -n 's/^PARENT_URL=//p' .dsf.app); else remote=base; url=$(sed -n 's/^BASE_URL=//p' .dsf.layer); fi
+          if [ -n "$PARENT_TOKEN" ]; then url=$(echo "$url" | sed "s#https://#https://x-access-token:${PARENT_TOKEN}@#"); fi
+          git remote add "$remote" "$url"
+          branch="dsf/sync-$(date +%Y-%m-%d)"
+          git switch -c "$branch"
+          scripts/dsf/dsf-sync.sh pull
+          if [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]; then echo "Already up to date."; exit 0; fi
+          git push -u origin "$branch"
+          gh pr create --base main --head "$branch" --title "dsf: sync factory from parent" \
+            --body "Weekly merge of the parent factory, made by the dsf-sync workflow. Review the changes, check CI, and merge with a merge commit (not squash), so the shared history stays intact."

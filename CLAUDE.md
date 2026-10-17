@@ -1,0 +1,5 @@
+# Dark / grey Software Factory
+
+@.dsf/CLAUDE.dsf.md
+@.dsf/CLAUDE.workflow.md
+@CLAUDE.app.md

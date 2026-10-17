@@ -1,0 +1,10 @@
+# The human reviews the contract, the architecture and the factory. Turn on "Require review from
+# Code Owners" in the branch protection for main to make this a gate.
+/specs/              @{{OWNER}}
+/uat/features/       @{{OWNER}}
+/docs/architecture/  @{{OWNER}}
+/.claude/            @{{OWNER}}
+/.dsf/               @{{OWNER}}
+/scripts/dsf/        @{{OWNER}}
+/config/dsf/         @{{OWNER}}
+/.github/            @{{OWNER}}
