@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# DSF git pre-commit hook: fast checks only (under ~10 seconds). Heavy checks run in the
+# Claude Stop hook (make check) and in CI. Installed by `git config core.hooksPath .dsf/githooks`.
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+
+# 1. Keep parent-owned and own changes in separate commits, so they can flow back up the chain.
+"$root/scripts/dsf/dsf-sync.sh" check-staged
+
+# 2. Generated settings must match their sources.
+if git diff --cached --name-only | grep -qE '^(\.dsf/settings/|\.claude/settings\.json$)'; then
+  node "$root/scripts/dsf/build-settings.mjs" --check
+fi
+
+# 3. Secrets never enter history (when gitleaks is installed).
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --no-banner --redact
+fi
+
+# 4. Stack checks on staged files (format, lint).
+make -C "$root" --no-print-directory -s precommit

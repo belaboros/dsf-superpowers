@@ -1,0 +1,35 @@
+# Weekly factory improvement: turn repeated corrections into rules, tune agents, propose upgrades.
+# Enable with DSF_AGENTS_ENABLED=true (see docs/dsf/setup.md).
+name: dsf-factory-improve
+on:
+  schedule:
+    - cron: "0 7 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  id-token: write
+jobs:
+  improve:
+    if: ${{ vars.DSF_AGENTS_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: if [ -f package-lock.json ]; then npm ci; elif [ -f package.json ]; then npm install; fi
+      - uses: anthropics/claude-code-action@v1
+        env:
+          DSF_MODE: factory
+          GH_TOKEN: ${{ github.token }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: |
+            Run the dsf-factory-improve skill for the last 7 days.
+            Open one pull request per kind of change on branches named dsf/improve-<topic>, with the evidence table.
+            Commit generic changes separately from application changes.

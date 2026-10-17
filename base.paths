@@ -1,0 +1,39 @@
+# Paths owned by dsf-base, the top of the factory chain:
+#
+#   dsf-base  ->  dsf-<workflow>  ->  application
+#
+# A workflow repo (dsf-superpowers, dsf-matt-pocock, ...) uses this file to tell
+# which of its changes belong to dsf-base. `scripts/dsf/dsf-sync.sh contribute`
+# sends commits that touch only these paths back to dsf-base.
+#
+# Pattern rules (same in dsf.paths):
+#   - A pattern ending in "/" or "-" matches every path that starts with it;
+#     any other pattern matches exactly one file.
+#   - "!pattern" excludes paths (owned by the lower repo).
+#   - "=pattern" names a file that dsf-base ships but each lower repo owns once it
+#     exists there (its README, its generated settings). `dsf-sync pull` keeps the
+#     lower repo's version of these files.
+#   - Later lines win.
+
+.dsf/
+!.dsf/settings/workflow.json
+!.dsf/settings/app.json
+!.dsf/modes.workflow.json
+!.dsf/modes.app.json
+!.dsf/templates/workflow-app/
+=.dsf/CLAUDE.workflow.md
+.claude/hooks/
+.claude/skills/dsf-
+.claude/agents/dsf-
+=.claude/settings.json
+scripts/dsf/
+config/dsf/
+docs/dsf/
+.github/workflows/dsf-
+CLAUDE.md
+Makefile
+cloneForApplication.sh
+base.paths
+dsf.paths
+=README.md
+=.gitignore

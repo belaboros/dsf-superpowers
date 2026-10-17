@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# DSF commit-msg hook: a type prefix keeps history and factory logs machine-readable.
+set -euo pipefail
+first="$(head -n 1 "$1")"
+types='feat|fix|test|refactor|docs|chore|perf|build|ci|spec|arch|uat|dsf|app|Merge|Revert'
+if ! grep -qE "^(${types})(\([a-z0-9._/-]+\))?!?: .+|^(Merge|Revert) " <<<"$first"; then
+  echo "commit-msg: start the subject with a type, for example 'feat(core): add rule engine' or 'dsf: tighten max-lines'." >&2
+  echo "Allowed types: ${types//|/, }" >&2
+  exit 1
+fi
