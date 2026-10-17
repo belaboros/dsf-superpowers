@@ -1,0 +1,5 @@
+# Dark / grey Software Factory workflow layer. Parent: dsf-base.
+ROLE=workflow
+WORKFLOW_NAME=superpowers
+BASE_URL=https://github.com/belaboros/dsf-base
+BASE_BRANCH=main
